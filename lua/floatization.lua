@@ -40,18 +40,18 @@ local function key_appear(typed, disappear, anchor)
     if created ~= true then
         forkey = vim.api.nvim_create_buf(false, true);
         created = true
-    end
-    vim.api.nvim_buf_set_name(forkey, 'floatization-forkey')
-    vim.api.nvim_open_win(forkey, false, {
-        relative = 'win',
-        focusable = false,
-        row = 0, -- ウィンドウの上部からの距離
-        col = 1000, -- ウィンドウの左端からの距離
-        width = 100,
-        height = 1,
-        anchor = anchor
-    })
+        vim.api.nvim_buf_set_name(forkey, 'floatization-forkey')
+        vim.api.nvim_open_win(forkey, false, {
+            relative = 'editor',
+            focusable = false,
+            row = 0, -- ウィンドウの上部からの距離
+            col = 1000, -- ウィンドウの左端からの距離
+            width = 100,
+            height = 1,
+            anchor = anchor
+        })
 
+    end
 
     vim.api.nvim_buf_set_lines(forkey, 0, 1, true, { typed_key });
 end
