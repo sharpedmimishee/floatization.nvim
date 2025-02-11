@@ -56,37 +56,44 @@ local function key_appear(typed, disappear, anchor)
     vim.api.nvim_buf_set_lines(forkey, 0, 1, true, { typed_key });
 end
 
+
 function M.setup(opts)
-    local buffer = opts.buffer;
-    local commands = opts.commands;
-    local key = opts.key;
-    local disappear = opts.disappear;
-    local anchor = opts.anchor;
-    if anchor == nil then anchor = "NE" end
+    local buffer = opts.buffer or false  -- default to false if not provided
+    local commands = opts.commands or {}
+    local key = opts.key or false
+    local disappear = opts.disappear or 10
+    local anchor = opts.anchor or "NE"
     First_buf = -1
-    Command = "";
+    Command = ""
+
     vim.api.nvim_create_autocmd("CmdLineLeave", {
         callback = function()
             Command = vim.fn.getcmdline()
             First_buf = vim.api.nvim_get_current_buf()
         end
     })
-    if buffer == true then
+
+    if buffer then  -- check if buffer is true
         vim.api.nvim_create_autocmd({ "BufEnter" }, {
             callback = function()
                 for k, _ in pairs(commands) do
                     if commands[k] == Command then
                         floatize()
-                        Command = "";
-                        break;
+                        Command = ""
+                        break
                     end
                 end
             end
         })
     end
-    if key == true then
-        vim.on_key(function(_key, typed) key_appear(typed, disappear, anchor) end)
+
+    if key then  -- check if key is true
+        vim.on_key(function(_key, typed)
+            key_appear(typed, disappear, anchor)
+        end)
     end
 end
 
+
+return M
 -- M.setup({ key = true, disappear = 10, anchor = "NE" })
